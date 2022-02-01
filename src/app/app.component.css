@@ -1,0 +1,9 @@
+.body-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.outlet {
+  flex-grow: 1;
+}

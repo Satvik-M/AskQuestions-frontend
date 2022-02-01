@@ -1,0 +1,19 @@
+.main {
+  height: 100%;
+  color: white;
+  background: linear-gradient(to right, #232526, #414345);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.main-wrapper {
+  width: 60vw;
+}
+
+.head {
+  font-weight: 600;
+  font-size: 3rem;
+}
