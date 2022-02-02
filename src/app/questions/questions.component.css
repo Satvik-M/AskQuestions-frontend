@@ -1,0 +1,47 @@
+.main {
+  margin: 1rem 2.5rem;
+}
+
+
+.questionHeading {
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+.question {
+  border: 1px solid rgba(0, 0, 0, .125);
+  margin: 1rem 0 0.5rem 0;
+  border-radius: 0.3rem;
+}
+
+.upvotes {
+  cursor: default;
+}
+
+.question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.edit,
+.upvotes,
+.upvoteButtons,
+.questionDescription {
+  margin: 0.5em 0.8em;
+}
+
+fa-icon {
+  cursor: pointer;
+}
+
+.icon.top {
+  margin-bottom: 0.25rem;
+}

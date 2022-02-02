@@ -1,1 +1,29 @@
-<p>questions works!</p>
+<div class="main">
+  <div class="questionHeading">All Questions</div>
+  <div class="questionWrapper">
+    <div class="question" *ngFor="let question of questions">
+      <div class="left">
+        <div class="upvotes">0</div>
+        <div class="upvoteButtons">
+          <div class="icon top">
+            <fa-icon [icon]="faangleup"></fa-icon>
+          </div>
+          <div class="icon">
+            <fa-icon [icon]="faangledown"></fa-icon>
+          </div>
+        </div>
+        <div class="questionDescription">
+          {{ question.title }}
+        </div>
+      </div>
+      <div class="edit">
+        <div class="icon top">
+          <fa-icon [icon]="faedit" class="fa-sm"></fa-icon>
+        </div>
+        <div class="icon">
+          <fa-icon [icon]="fatrash" class="fa-sm"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

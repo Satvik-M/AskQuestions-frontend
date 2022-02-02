@@ -7,8 +7,12 @@
     <div class="header-link">New Question</div>
   </div>
   <div class="right">
-    <div class="header-link">Login</div>
-    <div class="header-link">Register</div>
-    <div class="header-link">Logout</div>
+    <div class="header-link" (click)="onLogin()" *ngIf="!isAuthenticated">
+      Login
+    </div>
+    <div class="header-link" *ngIf="!isAuthenticated">Register</div>
+    <div class="header-link" *ngIf="isAuthenticated" (click)="onLogout()">
+      Logout
+    </div>
   </div>
 </nav>

@@ -1,16 +1,23 @@
+import { createReducer, on } from '@ngrx/store';
 import { Answer } from 'src/app/questions/answer.model';
 import * as AuthActions from './auth.actions';
 export interface State {
-  answers: Answer[];
+  user: boolean;
 }
+const initialState = {
+  user: false,
+};
 
-export function AuthReducer(state: State, action: AuthActions.AuthAction) {
-  switch (action.type) {
-    case AuthActions.LOGIN:
-      return {
-        ...state,
-      };
-    default:
-      return { ...state };
-  }
+const _authReducer = createReducer(
+  initialState,
+  on(AuthActions.Login, (state) => {
+    return { ...state, user: true };
+  }),
+  on(AuthActions.Logout, (state) => {
+    return { ...state, user: false };
+  })
+);
+
+export function AuthReducer(state, action) {
+  return _authReducer(state, action);
 }
