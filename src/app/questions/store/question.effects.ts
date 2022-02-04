@@ -47,6 +47,7 @@ export class QuestionEffects {
     return this.action$.pipe(
       ofType('[Question] Fetch Current Question'),
       switchMap(({ id }) => {
+        console.log(id);
         return this.http.get('http://localhost:3000/questions/' + id);
       }),
       map((question: Question) => {

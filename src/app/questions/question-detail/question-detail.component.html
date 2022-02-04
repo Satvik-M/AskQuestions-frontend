@@ -1,6 +1,6 @@
 <div class="main">
   <div class="question">Question</div>
-  <div class="title">what is mommy's name</div>
+  <div class="title">{{ question.title }}</div>
   <div class="descriptionWrapper">
     <div class="upvotes">0</div>
     <div class="upvoteButtons">
@@ -12,13 +12,7 @@
       </div>
     </div>
     <div class="questionDescription">
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam quis
-      delectus assumenda hic magni deleniti quas doloribus. Animi eligendi error
-      rem quo veniam eum mollitia eos quasi consequatur rerum. Porro! Lorem
-      ipsum dolor, sit amet consectetur adipisicing elit. Cumque aspernatur
-      dolorum molestias illo inventore consequuntur dolorem sapiente quaerat
-      eum! Nulla vitae, excepturi pariatur odio impedit adipisci et similique
-      quam quo?
+      {{ question.description }}
     </div>
   </div>
   <div *ngIf="answers && answers.length === 0" class="noAnswer">
@@ -27,8 +21,8 @@
   <div class="answer" *ngIf="answers && answers.length !== 0">Answers</div>
   <div class="answers">
     <div *ngIf="answers && answers.length !== 0">
-      <div class="answerWrapper" *ngFor="let answer of [1, 2]">
-        <div class="upvotes">0</div>
+      <div class="answerWrapper" *ngFor="let answer of answers">
+        <div class="upvotes">{{ answer.upvotes }}</div>
         <div class="upvoteButtons">
           <div class="icon top">
             <fa-icon [icon]="faangleup"></fa-icon>
@@ -38,13 +32,7 @@
           </div>
         </div>
         <div class="answerDescription">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam quis
-          delectus assumenda hic magni deleniti quas doloribus. Animi eligendi
-          error rem quo veniam eum mollitia eos quasi consequatur rerum. Porro!
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque
-          aspernatur dolorum molestias illo inventore consequuntur dolorem
-          sapiente quaerat eum! Nulla vitae, excepturi pariatur odio impedit
-          adipisci et similique quam quo?
+          {{ answer.answer }}
         </div>
       </div>
     </div>

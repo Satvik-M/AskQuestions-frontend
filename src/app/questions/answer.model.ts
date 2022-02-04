@@ -4,7 +4,7 @@ import { Question } from './questions.model';
 export class Answer {
   constructor(
     public answer: string,
-    public questions: Question,
+    public question: Question,
     public upvotes: number,
     author: User
   ) {}

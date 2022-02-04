@@ -7,6 +7,7 @@ import * as fromApp from '../../store/app.reducer';
 import { ActivatedRoute } from '@angular/router';
 import { Answer } from '../answer.model';
 import { map, tap } from 'rxjs/operators';
+import { Question } from '../questions.model';
 
 @Component({
   selector: 'app-question-detail',
@@ -23,6 +24,7 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   answers: Answer[];
   newAnswer: string = '';
   questionId;
+  question: Question;
   @ViewChild('form') form: NgForm;
 
   onSubmit() {
@@ -32,26 +34,16 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.route.snapshot.data;
     this.route.params.subscribe((params) => {
       this.questionId = params['id'];
     });
     this.store.dispatch(QuestionActions.FetchAnswers({ id: this.questionId }));
-    this.store
-      .select('question')
-      .pipe(
-        // tap((questionState) => {
-        //   if (!questionState.currentQuestion) {
-        //     this.store.dispatch(
-        //       QuestionActions.FetchCurrentQuestion({ id: this.questionId })
-        //     );
-        //   }
-        // }),
-        map((questionState) => questionState.answers)
-      )
-      .subscribe((answers) => {
-        this.answers = answers;
-        console.log(this.answers);
-      });
+    this.store.select('question').subscribe((QuestionState) => {
+      this.answers = QuestionState.answers;
+      this.question = QuestionState.currentQuestion;
+      console.log(this.answers);
+    });
   }
   ngOnDestroy(): void {}
 }
