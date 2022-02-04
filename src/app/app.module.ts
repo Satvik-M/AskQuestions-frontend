@@ -16,6 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { QuestionEffects } from './questions/store/question.effects';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { QuestionDetailComponent } from './questions/question-detail/question-detail.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,11 +26,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HomeComponent,
     QuestionsComponent,
     AuthComponent,
+    QuestionDetailComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     EffectsModule.forRoot([QuestionEffects]),

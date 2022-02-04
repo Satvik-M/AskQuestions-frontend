@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Question } from '../questions.model';
 import { Injectable } from '@angular/core';
 import * as QuestionActions from './questions.action';
+import { Answer } from '../answer.model';
 
 @Injectable()
 export class QuestionEffects {
@@ -18,7 +19,7 @@ export class QuestionEffects {
   fetchQuestions = createEffect(() =>
     this.action$.pipe(
       ofType('[Question] Fetch Questions'),
-      switchMap((questionState) => {
+      switchMap(() => {
         return this.http.get<Question[]>('http://localhost:3000/questions');
       }),
       map((questions) => {
@@ -26,4 +27,31 @@ export class QuestionEffects {
       })
     )
   );
+
+  fetchAnswers = createEffect(() => {
+    return this.action$.pipe(
+      ofType('[Question] Fetch Answers'),
+      switchMap(({ id }) => {
+        return this.http.get(
+          'http://localhost:3000/questions/' + id + '/answers'
+        );
+      }),
+      map((answers: { answers: Answer[] }) => {
+        console.log(answers);
+        return QuestionActions.SetAnswers({ answers: answers.answers });
+      })
+    );
+  });
+
+  fetchCurrentQuestion = createEffect(() => {
+    return this.action$.pipe(
+      ofType('[Question] Fetch Current Question'),
+      switchMap(({ id }) => {
+        return this.http.get('http://localhost:3000/questions/' + id);
+      }),
+      map((question: Question) => {
+        return QuestionActions.SetCurrentQuestion({ question: question });
+      })
+    );
+  });
 }

@@ -1,0 +1,67 @@
+<div class="main">
+  <div class="question">Question</div>
+  <div class="title">what is mommy's name</div>
+  <div class="descriptionWrapper">
+    <div class="upvotes">0</div>
+    <div class="upvoteButtons">
+      <div class="icon top">
+        <fa-icon [icon]="faangleup"></fa-icon>
+      </div>
+      <div class="icon">
+        <fa-icon [icon]="faangledown"></fa-icon>
+      </div>
+    </div>
+    <div class="questionDescription">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam quis
+      delectus assumenda hic magni deleniti quas doloribus. Animi eligendi error
+      rem quo veniam eum mollitia eos quasi consequatur rerum. Porro! Lorem
+      ipsum dolor, sit amet consectetur adipisicing elit. Cumque aspernatur
+      dolorum molestias illo inventore consequuntur dolorem sapiente quaerat
+      eum! Nulla vitae, excepturi pariatur odio impedit adipisci et similique
+      quam quo?
+    </div>
+  </div>
+  <div *ngIf="answers && answers.length === 0" class="noAnswer">
+    No one has answered the question yet. Be the first.
+  </div>
+  <div class="answer" *ngIf="answers && answers.length !== 0">Answers</div>
+  <div class="answers">
+    <div *ngIf="answers && answers.length !== 0">
+      <div class="answerWrapper" *ngFor="let answer of [1, 2]">
+        <div class="upvotes">0</div>
+        <div class="upvoteButtons">
+          <div class="icon top">
+            <fa-icon [icon]="faangleup"></fa-icon>
+          </div>
+          <div class="icon">
+            <fa-icon [icon]="faangledown"></fa-icon>
+          </div>
+        </div>
+        <div class="answerDescription">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam quis
+          delectus assumenda hic magni deleniti quas doloribus. Animi eligendi
+          error rem quo veniam eum mollitia eos quasi consequatur rerum. Porro!
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque
+          aspernatur dolorum molestias illo inventore consequuntur dolorem
+          sapiente quaerat eum! Nulla vitae, excepturi pariatur odio impedit
+          adipisci et similique quam quo?
+        </div>
+      </div>
+    </div>
+
+    <div class="form">
+      <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <textarea
+          type="text"
+          class="form-control"
+          rows="4"
+          [(ngModel)]="newAnswer"
+          name="answer"
+          required
+          placeholder="Type your answer here"
+        ></textarea>
+        <button class="btn btn-success">Post your answer</button>
+      </form>
+    </div>
+  </div>
+</div>
