@@ -25,12 +25,14 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   newAnswer: string = '';
   questionId;
   question: Question;
-  @ViewChild('form') form: NgForm;
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
     console.log(this.newAnswer);
-    console.log(this.form);
-    this.form.reset();
+    console.log(form.value.answer);
+    let ans = new Answer(form.value.answer, this.question, 0, 'pokpokpokpok;l');
+    console.log(ans);
+    this.answers = [...this.answers, ans];
+    form.reset();
   }
 
   ngOnInit(): void {

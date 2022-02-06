@@ -38,12 +38,12 @@
     </div>
 
     <div class="form">
-      <form #form="ngForm" (ngSubmit)="onSubmit()">
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
         <textarea
           type="text"
           class="form-control"
           rows="4"
-          [(ngModel)]="newAnswer"
+          ngModel
           name="answer"
           required
           placeholder="Type your answer here"

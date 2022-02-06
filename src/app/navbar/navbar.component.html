@@ -3,14 +3,16 @@
     <div>
       <a href="#" class="header-link home">AskQuestions</a>
     </div>
-    <div class="header-link">Questions</div>
+    <div class="header-link" (click)="toQuestions()">Questions</div>
     <div class="header-link">New Question</div>
   </div>
   <div class="right">
     <div class="header-link" (click)="onLogin()" *ngIf="!isAuthenticated">
       Login
     </div>
-    <div class="header-link" *ngIf="!isAuthenticated">Register</div>
+    <div class="header-link" *ngIf="!isAuthenticated" (click)="onRegister()">
+      Register
+    </div>
     <div class="header-link" *ngIf="isAuthenticated" (click)="onLogout()">
       Logout
     </div>

@@ -1,20 +1,48 @@
 import { createReducer, on } from '@ngrx/store';
-import { Answer } from 'src/app/questions/answer.model';
+import { User } from '../user.model';
 import * as AuthActions from './auth.actions';
 export interface State {
-  user: boolean;
+  user: User;
+  isLoading: boolean;
+  errMessage: string;
+  redirect: boolean;
 }
-const initialState = {
-  user: false,
+const initialState: State = {
+  user: null,
+  isLoading: false,
+  errMessage: null,
+  redirect: false,
 };
 
 const _authReducer = createReducer(
   initialState,
-  on(AuthActions.Login, (state) => {
-    return { ...state, user: true };
+  on(AuthActions.StartLogin, (state) => {
+    return { ...state, isLoading: true };
+  }),
+  on(AuthActions.StartRegister, (state) => {
+    return { ...state, isLoading: true };
   }),
   on(AuthActions.Logout, (state) => {
-    return { ...state, user: false };
+    localStorage.removeItem('token');
+    return { ...state, user: null };
+  }),
+  on(AuthActions.AuthenticateFail, (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      user: null,
+      errMessage: action.errMessage,
+    };
+  }),
+  on(AuthActions.AuthenticateSuccess, (state, action) => {
+    const user = new User(
+      action.username,
+      action.isVerified,
+      action.password,
+      action.email,
+      action.expirationDate
+    );
+    return { ...state, user: user, isLoading: false };
   })
 );
 

@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -10,10 +11,18 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
   isAuthenticated = false;
   onLogin() {
-    this.store.dispatch(AuthActions.Login());
+    this.router.navigate(['/login']);
+  }
+
+  toQuestions() {
+    this.router.navigate(['/questions']);
+  }
+
+  onRegister() {
+    this.router.navigate(['/register']);
   }
 
   onLogout() {

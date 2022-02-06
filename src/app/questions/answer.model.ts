@@ -6,6 +6,6 @@ export class Answer {
     public answer: string,
     public question: Question,
     public upvotes: number,
-    author: User
+    public author: string
   ) {}
 }

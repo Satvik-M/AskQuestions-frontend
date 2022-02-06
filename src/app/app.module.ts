@@ -7,7 +7,6 @@ import { HomeComponent } from './home/home.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
-import { AuthComponent } from './auth/auth.component';
 import { StoreModule } from '@ngrx/store';
 import * as fromApp from './store/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -18,6 +17,9 @@ import { QuestionEffects } from './questions/store/question.effects';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QuestionDetailComponent } from './questions/question-detail/question-detail.component';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -25,8 +27,9 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     HomeComponent,
     QuestionsComponent,
-    AuthComponent,
     QuestionDetailComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([QuestionEffects]),
+    EffectsModule.forRoot([QuestionEffects, AuthEffects]),
     FontAwesomeModule,
   ],
   providers: [],
