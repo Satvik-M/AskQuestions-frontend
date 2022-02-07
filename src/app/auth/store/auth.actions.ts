@@ -21,6 +21,7 @@ export const AuthenticateSuccess = createAction(
     isVerified: boolean;
     expirationDate: Date;
     token: string;
+    _id: string;
     redirect: boolean;
   }>()
 );

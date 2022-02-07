@@ -25,13 +25,19 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   newAnswer: string = '';
   questionId;
   question: Question;
+  userId: string;
 
   onSubmit(form: NgForm) {
     console.log(this.newAnswer);
     console.log(form.value.answer);
-    let ans = new Answer(form.value.answer, this.question, 0, 'pokpokpokpok;l');
-    console.log(ans);
-    this.answers = [...this.answers, ans];
+    this.store.dispatch(
+      QuestionActions.AddAnswer({
+        id: this.questionId,
+        answer: form.value.answer,
+        author: this.userId,
+      })
+    );
+    // this.answers = [...this.answers, ans];
     form.reset();
   }
 
@@ -46,6 +52,18 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
       this.question = QuestionState.currentQuestion;
       console.log(this.answers);
     });
+    this.store
+      .select('auth')
+      .pipe(
+        map((AuthState) => {
+          console.log(AuthState);
+          return AuthState.user;
+        })
+      )
+      .subscribe((user) => {
+        if (user) this.userId = user._id;
+        else this.userId = null;
+      });
   }
   ngOnDestroy(): void {}
 }

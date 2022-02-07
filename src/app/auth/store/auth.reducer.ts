@@ -40,7 +40,8 @@ const _authReducer = createReducer(
       action.password,
       action.email,
       action.expirationDate,
-      action.token
+      action.token,
+      action._id
     );
     return {
       ...state,

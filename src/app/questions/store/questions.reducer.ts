@@ -49,6 +49,9 @@ const _QuestionReducer = createReducer(
   }),
   on(QuestionActions.FetchCurrentQuestion, (state) => {
     return { ...state };
+  }),
+  on(QuestionActions.AddAnswer, (state) => {
+    return { ...state };
   })
 );
 

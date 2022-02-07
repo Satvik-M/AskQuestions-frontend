@@ -33,3 +33,12 @@ export const FetchCurrentQuestion = createAction(
   '[Question] Fetch Current Question',
   props<{ id: string }>()
 );
+
+export const AddAnswer = createAction(
+  '[Question] Add Answer',
+  props<{
+    id: string;
+    answer: string;
+    author: string;
+  }>()
+);

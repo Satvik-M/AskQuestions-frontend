@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as fromApp from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Question } from '../questions.model';
 import { Injectable } from '@angular/core';
@@ -52,6 +52,42 @@ export class QuestionEffects {
       }),
       map((question: Question) => {
         return QuestionActions.SetCurrentQuestion({ question: question });
+      })
+    );
+  });
+
+  addAnswer = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.AddAnswer),
+      switchMap((action) => {
+        return this.http
+          .post('http://localhost:3000/questions/' + action.id + '/answers', {
+            answer: action.answer,
+            author: action.author,
+          })
+          .pipe(
+            map((res: Answer) => {
+              let ans: Answer[];
+              this.store
+                .select('question')
+                .pipe(
+                  take(1),
+                  map((questionState) => questionState.answers)
+                )
+                .subscribe((answers) => {
+                  ans = answers;
+                });
+              const newAns = new Answer(
+                res.answer,
+                action.id,
+                res.upvotes,
+                res.author,
+                res.votes,
+                res._id
+              );
+              return QuestionActions.SetAnswers({ answers: [...ans, newAns] });
+            })
+          );
       })
     );
   });

@@ -4,8 +4,10 @@ import { Question } from './questions.model';
 export class Answer {
   constructor(
     public answer: string,
-    public question: Question,
+    public question: string,
     public upvotes: number,
-    public author: string
+    public author: string,
+    public votes: string[],
+    public _id: string
   ) {}
 }

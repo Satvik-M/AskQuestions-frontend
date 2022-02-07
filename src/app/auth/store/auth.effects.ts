@@ -33,10 +33,11 @@ export class AuthEffects {
       authRes.user.password,
       authRes.user.email,
       expirationDate,
-      authRes.token
+      authRes.token,
+      authRes.user._id
     );
     localStorage.setItem('user', JSON.stringify(user));
-    this.authService.setLogoutTimer(authRes.expiresIn * 1000);
+    this.authService.setLogoutTimer(authRes.expiresIn);
     return AuthActions.AuthenticateSuccess({
       username: authRes.user.username,
       email: authRes.user.email,
@@ -45,6 +46,7 @@ export class AuthEffects {
       expirationDate: expirationDate,
       token: authRes.token,
       redirect: true,
+      _id: authRes.user._id,
     });
   };
 
@@ -52,7 +54,7 @@ export class AuthEffects {
     return this.action$.pipe(
       ofType(AuthActions.StartRegister),
       switchMap((action) => {
-        console.log(action);
+        // console.log(action);
         return this.http
           .post<Authres>('http://localhost:3000/users/register', {
             email: action.email,
@@ -74,7 +76,7 @@ export class AuthEffects {
     return this.action$.pipe(
       ofType(AuthActions.StartLogin),
       switchMap((action) => {
-        console.log(action);
+        // console.log(action);
         return this.http
           .post<Authres>('http://localhost:3000/users/login', {
             email: action.email,
@@ -96,25 +98,25 @@ export class AuthEffects {
     return this.action$.pipe(
       ofType(AuthActions.AutoLogin),
       switchMap(() => {
-        console.log('autologin');
+        // console.log('autologin');
         const tokenUser = JSON.parse(localStorage.getItem('user'));
         if (!tokenUser) return of({ type: 'NONE' });
         return this.http
           .get('http://localhost:3000/users/login/jwt', {
-            params: new HttpParams().set('token', tokenUser.token),
+            // params: new HttpParams().set('token', tokenUser.token),
           })
           .pipe(
             tap((res) => {
-              console.log(res);
+              // console.log(res);
             }),
             map((user: User) => {
-              console.log(tokenUser.expirationDate);
-              console.log(new Date(tokenUser.expirationDate).getTime());
+              // console.log(tokenUser.expirationDate);
+              // console.log(new Date(tokenUser.expirationDate).getTime());
               const expirationDuration =
                 new Date(tokenUser.expirationDate).getTime() -
                 new Date().getTime();
-              console.log(expirationDuration);
-              this.authService.setLogoutTimer(expirationDuration * 1000);
+              // console.log(expirationDuration);
+              this.authService.setLogoutTimer(expirationDuration);
               return AuthActions.AuthenticateSuccess({
                 username: user.username,
                 email: user.email,
@@ -123,10 +125,11 @@ export class AuthEffects {
                 expirationDate: user.expirationDate,
                 token: tokenUser.token,
                 redirect: false,
+                _id: user._id,
               });
             }),
             catchError((errRes) => {
-              console.log(errRes);
+              // console.log(errRes);
               return of(
                 AuthActions.AuthenticateFail({
                   errMessage: errRes.error.message,

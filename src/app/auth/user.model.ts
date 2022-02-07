@@ -5,6 +5,7 @@ export class User {
     public password: string,
     public email: string,
     public expirationDate: Date,
-    public token: string
+    public token: string,
+    public _id: string
   ) {}
 }
