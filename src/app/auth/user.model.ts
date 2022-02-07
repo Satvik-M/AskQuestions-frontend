@@ -4,6 +4,7 @@ export class User {
     public isVerified: boolean,
     public password: string,
     public email: string,
-    public expirationDate: Date
+    public expirationDate: Date,
+    public token: string
   ) {}
 }

@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
   isAuthenticated = false;
+  userSub: Subscription = null;
   onLogin() {
     this.router.navigate(['/login']);
   }
@@ -30,7 +32,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store
+    this.userSub = this.store
       .select('auth')
       .pipe(
         map((authState) => {
@@ -41,5 +43,8 @@ export class NavbarComponent implements OnInit {
       .subscribe((user) => {
         this.isAuthenticated = !!user;
       });
+  }
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
   }
 }

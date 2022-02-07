@@ -23,7 +23,6 @@ const _authReducer = createReducer(
     return { ...state, isLoading: true };
   }),
   on(AuthActions.Logout, (state) => {
-    localStorage.removeItem('token');
     return { ...state, user: null };
   }),
   on(AuthActions.AuthenticateFail, (state, action) => {
@@ -40,9 +39,18 @@ const _authReducer = createReducer(
       action.isVerified,
       action.password,
       action.email,
-      action.expirationDate
+      action.expirationDate,
+      action.token
     );
-    return { ...state, user: user, isLoading: false };
+    return {
+      ...state,
+      user: user,
+      redirect: action.redirect,
+      isLoading: false,
+    };
+  }),
+  on(AuthActions.AutoLogin, (state) => {
+    return { ...state };
   })
 );
 

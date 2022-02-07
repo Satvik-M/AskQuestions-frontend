@@ -20,6 +20,8 @@ export const AuthenticateSuccess = createAction(
     password: string;
     isVerified: boolean;
     expirationDate: Date;
+    token: string;
+    redirect: boolean;
   }>()
 );
 
@@ -27,3 +29,5 @@ export const StartLogin = createAction(
   '[Auth] Start Login',
   props<{ email: string; password: string }>()
 );
+
+export const AutoLogin = createAction('[Auth] Auto Login');

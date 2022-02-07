@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { act, Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { createAction, Store } from '@ngrx/store';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import * as fromApp from '../../store/app.reducer';
 import { AuthService } from '../auth.service';
 import { User } from '../user.model';
@@ -25,15 +26,25 @@ export class AuthEffects {
 
   handleAuthentication = (authRes: Authres) => {
     console.log(authRes);
-    localStorage.setItem('token', authRes.token);
-    this.authService.setLogoutTimer(authRes.expiresIn);
     const expirationDate = new Date(new Date().getTime() + +authRes.expiresIn);
+    const user = new User(
+      authRes.user.username,
+      authRes.user.isVerified,
+      authRes.user.password,
+      authRes.user.email,
+      expirationDate,
+      authRes.token
+    );
+    localStorage.setItem('user', JSON.stringify(user));
+    this.authService.setLogoutTimer(authRes.expiresIn * 1000);
     return AuthActions.AuthenticateSuccess({
       username: authRes.user.username,
       email: authRes.user.email,
       password: authRes.user.password,
       isVerified: authRes.user.isVerified,
       expirationDate: expirationDate,
+      token: authRes.token,
+      redirect: true,
     });
   };
 
@@ -80,10 +91,84 @@ export class AuthEffects {
       })
     );
   });
+
+  autoLogin = createEffect(() => {
+    return this.action$.pipe(
+      ofType(AuthActions.AutoLogin),
+      switchMap(() => {
+        console.log('autologin');
+        const tokenUser = JSON.parse(localStorage.getItem('user'));
+        if (!tokenUser) return of({ type: 'NONE' });
+        return this.http
+          .get('http://localhost:3000/users/login/jwt', {
+            params: new HttpParams().set('token', tokenUser.token),
+          })
+          .pipe(
+            tap((res) => {
+              console.log(res);
+            }),
+            map((user: User) => {
+              console.log(tokenUser.expirationDate);
+              console.log(new Date(tokenUser.expirationDate).getTime());
+              const expirationDuration =
+                new Date(tokenUser.expirationDate).getTime() -
+                new Date().getTime();
+              console.log(expirationDuration);
+              this.authService.setLogoutTimer(expirationDuration * 1000);
+              return AuthActions.AuthenticateSuccess({
+                username: user.username,
+                email: user.email,
+                password: user.password,
+                isVerified: user.isVerified,
+                expirationDate: user.expirationDate,
+                token: tokenUser.token,
+                redirect: false,
+              });
+            }),
+            catchError((errRes) => {
+              console.log(errRes);
+              return of(
+                AuthActions.AuthenticateFail({
+                  errMessage: errRes.error.message,
+                })
+              );
+            })
+          );
+      })
+    );
+  });
+
+  logout = createEffect(
+    () => {
+      return this.action$.pipe(
+        ofType(AuthActions.Logout),
+        tap(() => {
+          this.authService.clearLogoutTimer();
+          localStorage.removeItem('user');
+          this.router.navigate(['/login']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  authenticateSuccess = createEffect(
+    () => {
+      return this.action$.pipe(
+        ofType(AuthActions.AuthenticateSuccess),
+        tap((action) => {
+          action.redirect && this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
   constructor(
     private action$: Actions,
     private store: Store<fromApp.AppState>,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 }
