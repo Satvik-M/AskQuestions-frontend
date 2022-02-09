@@ -1,12 +1,13 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as fromApp from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Question } from '../questions.model';
 import { Injectable } from '@angular/core';
 import * as QuestionActions from './questions.action';
 import { Answer } from '../answer.model';
+import { of } from 'rxjs';
 
 @Injectable()
 export class QuestionEffects {
@@ -91,4 +92,29 @@ export class QuestionEffects {
       })
     );
   });
+
+  AddQuestion = createEffect(
+    () => {
+      return this.action$.pipe(
+        ofType(QuestionActions.AddQuestion),
+        switchMap((action) => {
+          return this.http
+            .post('http://localhost:3000/questions', {
+              title: action.title,
+              description: action.description,
+              author: action.id,
+            })
+            .pipe(
+              map((res) => {
+                console.log(res);
+              }),
+              catchError((errRes) => {
+                return of(console.log(errRes));
+              })
+            );
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

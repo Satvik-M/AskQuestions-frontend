@@ -23,6 +23,7 @@ export class QuestionDetailResolver implements Resolve<Question> {
         map((questionState) => questionState.currentQuestion)
       )
       .subscribe((currentQuestion) => {
+        console.log(currentQuestion);
         this.currentQuestion = currentQuestion;
       });
   }

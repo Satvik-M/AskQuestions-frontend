@@ -26,10 +26,12 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   questionId;
   question: Question;
   userId: string;
+  isLoadingQuestions = false;
+  isLoadingAnswers = false;
 
   onSubmit(form: NgForm) {
-    console.log(this.newAnswer);
-    console.log(form.value.answer);
+    // console.log(this.newAnswer);
+    // console.log(form.value.answer);
     this.store.dispatch(
       QuestionActions.AddAnswer({
         id: this.questionId,
@@ -50,16 +52,13 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
     this.store.select('question').subscribe((QuestionState) => {
       this.answers = QuestionState.answers;
       this.question = QuestionState.currentQuestion;
-      console.log(this.answers);
+      this.isLoadingQuestions = QuestionState.isLoadingQuestions;
+      this.isLoadingAnswers = QuestionState.isLoadingAnswers;
+      // console.log(this.answers);
     });
     this.store
       .select('auth')
-      .pipe(
-        map((AuthState) => {
-          console.log(AuthState);
-          return AuthState.user;
-        })
-      )
+      .pipe(map((authState) => authState.user))
       .subscribe((user) => {
         if (user) this.userId = user._id;
         else this.userId = null;

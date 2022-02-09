@@ -2,11 +2,6 @@ import { createAction, props } from '@ngrx/store';
 import { Answer } from '../answer.model';
 import { Question } from '../questions.model';
 
-export const AddQuestion = createAction(
-  '[Question] Add Question',
-  props<{ question: Question }>()
-);
-
 export const FetchQuestions = createAction('[Question] Fetch Questions');
 
 export const SetQuestions = createAction(
@@ -40,5 +35,14 @@ export const AddAnswer = createAction(
     id: string;
     answer: string;
     author: string;
+  }>()
+);
+
+export const AddQuestion = createAction(
+  '[Question] Add Question',
+  props<{
+    id: string;
+    title: string;
+    description: string;
   }>()
 );

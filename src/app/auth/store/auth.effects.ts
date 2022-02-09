@@ -97,46 +97,67 @@ export class AuthEffects {
   autoLogin = createEffect(() => {
     return this.action$.pipe(
       ofType(AuthActions.AutoLogin),
-      switchMap(() => {
-        // console.log('autologin');
+      // switchMap(() => {
+      //   // console.log('autologin');
+      //   const tokenUser = JSON.parse(localStorage.getItem('user'));
+      //   if (!tokenUser) return of({ type: 'NONE' });
+      //   return this.http
+      //     .get('http://localhost:3000/users/login/jwt', {
+      //       // params: new HttpParams().set('token', tokenUser.token),
+      //     })
+      //     .pipe(
+      //       tap((res) => {
+      //         // console.log(res);
+      //       }),
+      //       map((user: User) => {
+      //         // console.log(tokenUser.expirationDate);
+      //         // console.log(new Date(tokenUser.expirationDate).getTime());
+      //         const expirationDuration =
+      //           new Date(tokenUser.expirationDate).getTime() -
+      //           new Date().getTime();
+      //         // console.log(expirationDuration);
+      //         this.authService.setLogoutTimer(expirationDuration);
+      //         return AuthActions.AuthenticateSuccess({
+      //           username: user.username,
+      //           email: user.email,
+      //           password: user.password,
+      //           isVerified: user.isVerified,
+      //           expirationDate: user.expirationDate,
+      //           token: tokenUser.token,
+      //           redirect: false,
+      //           _id: user._id,
+      //         });
+      //       }),
+      //       catchError((errRes) => {
+      //         // console.log(errRes);
+      //         return of(
+      //           AuthActions.AuthenticateFail({
+      //             errMessage: errRes.error.message,
+      //           })
+      //         );
+      //       })
+      //     );
+      // })
+      map(() => {
         const tokenUser = JSON.parse(localStorage.getItem('user'));
-        if (!tokenUser) return of({ type: 'NONE' });
-        return this.http
-          .get('http://localhost:3000/users/login/jwt', {
-            // params: new HttpParams().set('token', tokenUser.token),
-          })
-          .pipe(
-            tap((res) => {
-              // console.log(res);
-            }),
-            map((user: User) => {
-              // console.log(tokenUser.expirationDate);
-              // console.log(new Date(tokenUser.expirationDate).getTime());
-              const expirationDuration =
-                new Date(tokenUser.expirationDate).getTime() -
-                new Date().getTime();
-              // console.log(expirationDuration);
-              this.authService.setLogoutTimer(expirationDuration);
-              return AuthActions.AuthenticateSuccess({
-                username: user.username,
-                email: user.email,
-                password: user.password,
-                isVerified: user.isVerified,
-                expirationDate: user.expirationDate,
-                token: tokenUser.token,
-                redirect: false,
-                _id: user._id,
-              });
-            }),
-            catchError((errRes) => {
-              // console.log(errRes);
-              return of(
-                AuthActions.AuthenticateFail({
-                  errMessage: errRes.error.message,
-                })
-              );
-            })
-          );
+        if (!tokenUser) return { type: 'NONE' };
+        const user: User = tokenUser;
+        if (user.token) {
+          const expirationDuration =
+            new Date(tokenUser.expirationDate).getTime() - new Date().getTime();
+          // console.log(expirationDuration);
+          this.authService.setLogoutTimer(expirationDuration);
+          return AuthActions.AuthenticateSuccess({
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            isVerified: user.isVerified,
+            expirationDate: user.expirationDate,
+            token: tokenUser.token,
+            redirect: false,
+            _id: user._id,
+          });
+        } else return { type: 'DUMMY' };
       })
     );
   });

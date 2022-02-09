@@ -50,3 +50,7 @@ fa-icon {
 .icon.top {
   margin-bottom: 0.25rem;
 }
+
+.questionDescription {
+  cursor: pointer
+}

@@ -1,22 +1,24 @@
 <div class="main">
   <div class="questionHeading">All Questions</div>
-  <div class="questionWrapper">
+  <app-loader *ngIf="isLoading" style="text-align: center"></app-loader>
+  <div class="questionWrapper" *ngIf="!isLoading">
     <div class="question" *ngFor="let question of questions">
       <div class="left">
         <div class="upvotes">0</div>
         <div class="upvoteButtons">
           <div class="icon top">
-            <fa-icon [icon]="faangleup"></fa-icon>
+            <fa-icon (click)="upvote(question)" [icon]="faangleup"></fa-icon>
           </div>
           <div class="icon">
-            <fa-icon [icon]="faangledown"></fa-icon>
+            <fa-icon
+              (click)="downvote(question)"
+              [icon]="faangledown"
+            ></fa-icon>
           </div>
         </div>
-        <a routerLink="{{ question._id }}">
-          <div class="questionDescription">
-            {{ question.title }}
-          </div>
-        </a>
+        <div class="questionDescription" (click)="setCurrentQuestion(question)">
+          {{ question.title }}
+        </div>
       </div>
       <div class="edit">
         <div class="icon top">

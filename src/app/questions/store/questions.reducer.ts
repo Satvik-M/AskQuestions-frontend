@@ -9,6 +9,8 @@ export interface State {
   questions: Question[];
   answers: Answer[];
   currentQuestion: Question;
+  isLoadingQuestions: boolean;
+  isLoadingAnswers: boolean;
 }
 
 const initialState: State = {
@@ -16,41 +18,46 @@ const initialState: State = {
   questions: null,
   answers: null,
   currentQuestion: null,
+  isLoadingQuestions: false,
+  isLoadingAnswers: false,
 };
 
 const _QuestionReducer = createReducer(
   initialState,
-  on(QuestionActions.AddQuestion, (state, { question }) => {
-    return { ...state, newQuestion: question };
-  }),
   on(QuestionActions.FetchQuestions, (state) => {
-    return { ...state };
+    return { ...state, isLoadingQuestions: true };
   }),
   on(QuestionActions.SetQuestions, (state, { questions }) => {
     return {
       ...state,
       questions: questions,
+      isLoadingQuestions: false,
     };
   }),
   on(QuestionActions.FetchAnswers, (state) => {
-    return { ...state };
+    return { ...state, isLoadingAnswers: true };
   }),
   on(QuestionActions.SetAnswers, (state, { answers }) => {
     return {
       ...state,
       answers: answers,
+      isLoadingAnswers: false,
     };
   }),
   on(QuestionActions.SetCurrentQuestion, (state, { question }) => {
     return {
       ...state,
       currentQuestion: question,
+      isLoadingQuestions: false,
     };
   }),
   on(QuestionActions.FetchCurrentQuestion, (state) => {
-    return { ...state };
+    return { ...state, isLoadingQuestions: true };
   }),
   on(QuestionActions.AddAnswer, (state) => {
+    return { ...state };
+  }),
+  on(QuestionActions.AddQuestion, (state, action) => {
     return { ...state };
   })
 );

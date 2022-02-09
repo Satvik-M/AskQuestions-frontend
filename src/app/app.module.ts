@@ -20,6 +20,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthEffects } from './auth/store/auth.effects';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
+import { NewQuestionComponent } from './questions/new-question/new-question.component';
+import { LoaderComponent } from './common/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { AuthInterceptor } from './auth/auth-interceptor.service';
     QuestionDetailComponent,
     LoginComponent,
     RegisterComponent,
+    NewQuestionComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

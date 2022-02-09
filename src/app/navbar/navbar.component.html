@@ -4,7 +4,7 @@
       <a href="#" class="header-link home">AskQuestions</a>
     </div>
     <div class="header-link" (click)="toQuestions()">Questions</div>
-    <div class="header-link">New Question</div>
+    <div class="header-link" (click)="toNewQuestions()">New Question</div>
   </div>
   <div class="right">
     <div class="header-link" (click)="onLogin()" *ngIf="!isAuthenticated">

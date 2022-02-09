@@ -1,0 +1,17 @@
+.row {
+  margin-top: 1rem;
+  width: 100%
+}
+
+.heading {
+  text-align: center;
+}
+
+.form-label {
+  /* font-weight: 500; */
+  margin-bottom: 0.25rem;
+}
+
+.btn {
+  margin-top: 0.5rem;
+}

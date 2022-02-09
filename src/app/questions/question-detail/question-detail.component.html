@@ -1,4 +1,5 @@
-<div class="main">
+<app-loader *ngIf="isLoadingQuestions" style="text-align: center"></app-loader>
+<div *ngIf="!isLoadingQuestions" class="main">
   <div class="question">Question</div>
   <div class="title">{{ question.title }}</div>
   <div class="descriptionWrapper">
@@ -15,41 +16,44 @@
       {{ question.description }}
     </div>
   </div>
-  <div *ngIf="answers && answers.length === 0" class="noAnswer">
-    No one has answered the question yet. Be the first.
-  </div>
-  <div class="answer" *ngIf="answers && answers.length !== 0">Answers</div>
-  <div class="answers">
-    <div *ngIf="answers && answers.length !== 0">
-      <div class="answerWrapper" *ngFor="let answer of answers">
-        <div class="upvotes">{{ answer.upvotes }}</div>
-        <div class="upvoteButtons">
-          <div class="icon top">
-            <fa-icon [icon]="faangleup"></fa-icon>
+  <app-loader *ngIf="isLoadingAnswers" style="text-align: center"></app-loader>
+  <div *ngIf="!isLoadingAnswers">
+    <div *ngIf="answers && answers.length === 0" class="noAnswer">
+      No one has answered the question yet. Be the first.
+    </div>
+    <div class="answer" *ngIf="answers && answers.length !== 0">Answers</div>
+    <div class="answers">
+      <div *ngIf="answers && answers.length !== 0">
+        <div class="answerWrapper" *ngFor="let answer of answers">
+          <div class="upvotes">{{ answer.upvotes }}</div>
+          <div class="upvoteButtons">
+            <div class="icon top">
+              <fa-icon [icon]="faangleup"></fa-icon>
+            </div>
+            <div class="icon">
+              <fa-icon [icon]="faangledown"></fa-icon>
+            </div>
           </div>
-          <div class="icon">
-            <fa-icon [icon]="faangledown"></fa-icon>
+          <div class="answerDescription">
+            {{ answer.answer }}
           </div>
-        </div>
-        <div class="answerDescription">
-          {{ answer.answer }}
         </div>
       </div>
-    </div>
 
-    <div class="form">
-      <form #Answerform="ngForm" (ngSubmit)="onSubmit(Answerform)">
-        <textarea
-          type="text"
-          class="form-control"
-          rows="4"
-          ngModel
-          name="answer"
-          required
-          placeholder="Type your answer here"
-        ></textarea>
-        <button class="btn btn-success">Post your answer</button>
-      </form>
+      <div class="form">
+        <form #Answerform="ngForm" (ngSubmit)="onSubmit(Answerform)">
+          <textarea
+            type="text"
+            class="form-control"
+            rows="4"
+            ngModel
+            name="answer"
+            required
+            placeholder="Type your answer here"
+          ></textarea>
+          <button class="btn btn-success">Post your answer</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

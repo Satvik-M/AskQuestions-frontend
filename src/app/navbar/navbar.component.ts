@@ -23,6 +23,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/questions']);
   }
 
+  toNewQuestions() {
+    this.router.navigate(['/questions', 'new']);
+  }
+
   onRegister() {
     this.router.navigate(['/register']);
   }
