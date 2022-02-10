@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Answer } from '../answer.model';
 import { map, tap } from 'rxjs/operators';
 import { Question } from '../questions.model';
+import { QuestionsService } from '../questions.service';
+import { User } from 'src/app/auth/user.model';
 
 @Component({
   selector: 'app-question-detail',
@@ -17,7 +19,8 @@ import { Question } from '../questions.model';
 export class QuestionDetailComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private questionService: QuestionsService
   ) {}
   faangleup = faAngleUp;
   faangledown = faAngleDown;
@@ -26,6 +29,7 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   questionId;
   question: Question;
   userId: string;
+  user: User;
   isLoadingQuestions = false;
   isLoadingAnswers = false;
 
@@ -60,9 +64,25 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
       .select('auth')
       .pipe(map((authState) => authState.user))
       .subscribe((user) => {
-        if (user) this.userId = user._id;
-        else this.userId = null;
+        if (user) {
+          this.user = user;
+          this.userId = user._id;
+        } else this.userId = null;
       });
   }
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.store.dispatch(QuestionActions.SetCurrentQuestion({ question: null }));
+  }
+  upvoteQuestion(paramQuestion: Question) {
+    this.questionService.questionUpvote(paramQuestion, this.user);
+  }
+  downvoteQuestion(paramQuestion: Question) {
+    this.questionService.questionDownvote(paramQuestion, this.user);
+  }
+  upvoteAnswer(paramAnswer: Answer) {
+    this.questionService.answerUpvoting(paramAnswer, this.user);
+  }
+  downvoteAnswer(paramAnswer: Answer) {
+    this.questionService.answerDownvoting(paramAnswer, this.user);
+  }
 }

@@ -56,3 +56,8 @@ export const VoteQuestion = createAction(
   '[Question] Vote Question',
   props<{ question: Question; value: number }>()
 );
+
+export const VoteAnswer = createAction(
+  '[Question] Vote Answer',
+  props<{ answer: Answer; value: number }>()
+);

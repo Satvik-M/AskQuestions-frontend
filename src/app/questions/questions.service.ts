@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { User } from '../auth/user.model';
 import * as fromApp from '../store/app.reducer';
+import { Answer } from './answer.model';
 import { Question } from './questions.model';
 import * as QuestionActions from './store/questions.action';
 
@@ -70,9 +71,62 @@ export class QuestionsService {
     this.store.dispatch(
       QuestionActions.VoteQuestion({ question: question, value: -1 })
     );
+  }
 
+  answerUpvoting(paramAnswer: Answer, user: User) {
+    let answer = { ...paramAnswer };
+    if (
+      answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === -1
+      ) !== -1
+    ) {
+      const index = answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === -1
+      );
+      const newVotes = answer.votes.slice();
+      newVotes.splice(+index, 1);
+      answer.votes = newVotes;
+      answer.upvotes = answer.upvotes + 1;
+    } else if (
+      answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === 1
+      ) !== -1
+    ) {
+      return;
+    }
+    answer.upvotes = answer.upvotes + 1;
+    const votes = [...answer.votes, { user: user._id, value: 1 }];
+    answer.votes = votes;
     this.store.dispatch(
-      QuestionActions.VoteQuestion({ question: question, value: -1 })
+      QuestionActions.VoteAnswer({ answer: answer, value: 1 })
+    );
+  }
+  answerDownvoting(paramAnswer: Answer, user: User) {
+    let answer = { ...paramAnswer };
+    if (
+      answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === -1
+      ) !== -1
+    ) {
+      return;
+    } else if (
+      answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === 1
+      ) !== -1
+    ) {
+      const index = answer.votes.findIndex(
+        (vote) => vote.user === user._id && vote.value === 1
+      );
+      const newVotes = answer.votes.slice();
+      newVotes.splice(+index, 1);
+      answer.votes = newVotes;
+      answer.upvotes = answer.upvotes - 1;
+    }
+    answer.upvotes = answer.upvotes - 1;
+    const votes = [...answer.votes, { user: user._id, value: -1 }];
+    answer.votes = votes;
+    this.store.dispatch(
+      QuestionActions.VoteAnswer({ answer: answer, value: -1 })
     );
   }
 }

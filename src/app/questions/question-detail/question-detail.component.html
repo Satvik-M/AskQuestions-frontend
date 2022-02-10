@@ -3,13 +3,19 @@
   <div class="question">Question</div>
   <div class="title">{{ question.title }}</div>
   <div class="descriptionWrapper">
-    <div class="upvotes">0</div>
+    <div class="upvotes">{{ question.upvotes }}</div>
     <div class="upvoteButtons">
       <div class="icon top">
-        <fa-icon [icon]="faangleup"></fa-icon>
+        <fa-icon
+          [icon]="faangleup"
+          (click)="upvoteQuestion(question)"
+        ></fa-icon>
       </div>
       <div class="icon">
-        <fa-icon [icon]="faangledown"></fa-icon>
+        <fa-icon
+          [icon]="faangledown"
+          (click)="downvoteQuestion(question)"
+        ></fa-icon>
       </div>
     </div>
     <div class="questionDescription">
@@ -28,10 +34,16 @@
           <div class="upvotes">{{ answer.upvotes }}</div>
           <div class="upvoteButtons">
             <div class="icon top">
-              <fa-icon [icon]="faangleup"></fa-icon>
+              <fa-icon
+                [icon]="faangleup"
+                (click)="upvoteAnswer(answer)"
+              ></fa-icon>
             </div>
             <div class="icon">
-              <fa-icon [icon]="faangledown"></fa-icon>
+              <fa-icon
+                [icon]="faangledown"
+                (click)="downvoteAnswer(answer)"
+              ></fa-icon>
             </div>
           </div>
           <div class="answerDescription">

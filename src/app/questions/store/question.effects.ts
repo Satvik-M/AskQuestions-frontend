@@ -136,6 +136,19 @@ export class QuestionEffects {
         }
         return this.http.get(url).pipe(
           map((res) => {
+            let current: Question;
+            this.store
+              .select('question')
+              .pipe(
+                take(1),
+                map((questionState) => questionState.currentQuestion)
+              )
+              .subscribe((currentQuestion) => (current = currentQuestion));
+            if (current && action.question._id === current._id) {
+              return QuestionActions.SetCurrentQuestion({
+                question: action.question,
+              });
+            }
             let allQuestions: Question[];
             this.store
               .select('question')
@@ -153,6 +166,52 @@ export class QuestionEffects {
               }
             }
             return QuestionActions.SetQuestions({ questions: newArray });
+          })
+        );
+      })
+    );
+    // );
+  });
+
+  VoteAnswer = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.VoteAnswer),
+      switchMap((action) => {
+        let url = '';
+        if (action.value === 1) {
+          url =
+            'http://localhost:3000/questions/' +
+            action.answer.question +
+            '/answers/' +
+            action.answer._id +
+            '/upvote';
+        } else {
+          url =
+            'http://localhost:3000/questions/' +
+            action.answer.question +
+            '/answers/' +
+            action.answer._id +
+            '/downvote';
+        }
+        return this.http.get(url).pipe(
+          map((res) => {
+            let allAnswers: Answer[];
+            this.store
+              .select('question')
+              .pipe(
+                take(1),
+                map((questionState) => questionState.answers)
+              )
+              .subscribe((questions) => {
+                allAnswers = questions;
+              });
+            let newArray = allAnswers.slice();
+            for (let index in allAnswers) {
+              if (allAnswers[index]._id === action.answer._id) {
+                newArray[index] = action.answer;
+              }
+            }
+            return QuestionActions.SetAnswers({ answers: newArray });
           })
         );
       })

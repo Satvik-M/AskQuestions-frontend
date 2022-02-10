@@ -7,7 +7,7 @@ export class Answer {
     public question: string,
     public upvotes: number,
     public author: string,
-    public votes: string[],
+    public votes: { user: string; value: number }[],
     public _id: string
   ) {}
 }
