@@ -7,6 +7,6 @@ export class Question {
     public description: string,
     public upvotes: number,
     public author: User,
-    public votes: string[]
+    public votes: { user: string; value: number }[]
   ) {}
 }

@@ -46,3 +46,13 @@ export const AddQuestion = createAction(
     description: string;
   }>()
 );
+
+export const EditQuestion = createAction(
+  '[Question] Edit Question',
+  props<{ question: Question }>()
+);
+
+export const VoteQuestion = createAction(
+  '[Question] Vote Question',
+  props<{ question: Question; value: number }>()
+);

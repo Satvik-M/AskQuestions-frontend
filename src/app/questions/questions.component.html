@@ -4,7 +4,7 @@
   <div class="questionWrapper" *ngIf="!isLoading">
     <div class="question" *ngFor="let question of questions">
       <div class="left">
-        <div class="upvotes">0</div>
+        <div class="upvotes">{{ question.upvotes }}</div>
         <div class="upvoteButtons">
           <div class="icon top">
             <fa-icon (click)="upvote(question)" [icon]="faangleup"></fa-icon>

@@ -59,6 +59,9 @@ const _QuestionReducer = createReducer(
   }),
   on(QuestionActions.AddQuestion, (state, action) => {
     return { ...state };
+  }),
+  on(QuestionActions.EditQuestion, (state) => {
+    return { ...state };
   })
 );
 

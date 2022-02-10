@@ -117,4 +117,46 @@ export class QuestionEffects {
     },
     { dispatch: false }
   );
+
+  VoteQuestion = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.VoteQuestion),
+      switchMap((action) => {
+        let url = '';
+        if (action.value === 1) {
+          url =
+            'http://localhost:3000/questions/' +
+            action.question._id +
+            '/upvote';
+        } else {
+          url =
+            'http://localhost:3000/questions/' +
+            action.question._id +
+            '/downvote';
+        }
+        return this.http.get(url).pipe(
+          map((res) => {
+            let allQuestions: Question[];
+            this.store
+              .select('question')
+              .pipe(
+                take(1),
+                map((questionState) => questionState.questions)
+              )
+              .subscribe((questions) => {
+                allQuestions = questions;
+              });
+            let newArray = allQuestions.slice();
+            for (let index in allQuestions) {
+              if (allQuestions[index]._id === action.question._id) {
+                newArray[index] = action.question;
+              }
+            }
+            return QuestionActions.SetQuestions({ questions: newArray });
+          })
+        );
+      })
+    );
+    // );
+  });
 }

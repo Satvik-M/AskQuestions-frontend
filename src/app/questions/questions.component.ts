@@ -12,6 +12,7 @@ import { map, tap } from 'rxjs/operators';
 import { Question } from './questions.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../auth/user.model';
+import { QuestionsService } from './questions.service';
 
 @Component({
   selector: 'app-questions',
@@ -22,7 +23,8 @@ export class QuestionsComponent implements OnInit {
   constructor(
     private store: Store<fromApp.AppState>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private questionService: QuestionsService
   ) {}
   faangleup = faAngleUp;
   faangledown = faAngleDown;
@@ -55,6 +57,10 @@ export class QuestionsComponent implements OnInit {
     console.log(questionId);
     this.router.navigate([questionId], { relativeTo: this.route });
   }
-  upvote(question: Question) {}
-  downvote(question: Question) {}
+  upvote(paramQuestion: Question) {
+    this.questionService.questionUpvote(paramQuestion, this.user);
+  }
+  downvote(paramQuestion: Question) {
+    this.questionService.questionDownvote(paramQuestion, this.user);
+  }
 }
