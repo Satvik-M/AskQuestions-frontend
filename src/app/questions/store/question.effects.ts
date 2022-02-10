@@ -17,6 +17,59 @@ export class QuestionEffects {
     private http: HttpClient
   ) {}
 
+  editQuestion(editedQuestion: Question) {
+    let current: Question;
+    this.store
+      .select('question')
+      .pipe(
+        take(1),
+        map((questionState) => questionState.currentQuestion)
+      )
+      .subscribe((currentQuestion) => (current = currentQuestion));
+    if (current && editedQuestion._id === current._id) {
+      return QuestionActions.SetCurrentQuestion({
+        question: editedQuestion,
+      });
+    }
+    let allQuestions: Question[];
+    this.store
+      .select('question')
+      .pipe(
+        take(1),
+        map((questionState) => questionState.questions)
+      )
+      .subscribe((questions) => {
+        allQuestions = questions;
+      });
+    let newArray = allQuestions.slice();
+    for (let index in allQuestions) {
+      if (allQuestions[index]._id === editedQuestion._id) {
+        newArray[index] = editedQuestion;
+      }
+    }
+    return QuestionActions.SetQuestions({ questions: newArray });
+  }
+
+  editAnswer(answer: Answer) {
+    let allAnswers: Answer[];
+    this.store
+      .select('question')
+      .pipe(
+        take(1),
+        map((questionState) => questionState.answers)
+      )
+      .subscribe((questions) => {
+        allAnswers = questions;
+      });
+    let newArray = allAnswers.slice();
+    for (let index in allAnswers) {
+      if (allAnswers[index]._id === answer._id) {
+        newArray[index] = answer;
+      }
+    }
+    return QuestionActions.SetAnswers({ answers: newArray });
+  }
+
   fetchQuestions = createEffect(() =>
     this.action$.pipe(
       ofType('[Question] Fetch Questions'),
@@ -136,36 +189,7 @@ export class QuestionEffects {
         }
         return this.http.get(url).pipe(
           map((res) => {
-            let current: Question;
-            this.store
-              .select('question')
-              .pipe(
-                take(1),
-                map((questionState) => questionState.currentQuestion)
-              )
-              .subscribe((currentQuestion) => (current = currentQuestion));
-            if (current && action.question._id === current._id) {
-              return QuestionActions.SetCurrentQuestion({
-                question: action.question,
-              });
-            }
-            let allQuestions: Question[];
-            this.store
-              .select('question')
-              .pipe(
-                take(1),
-                map((questionState) => questionState.questions)
-              )
-              .subscribe((questions) => {
-                allQuestions = questions;
-              });
-            let newArray = allQuestions.slice();
-            for (let index in allQuestions) {
-              if (allQuestions[index]._id === action.question._id) {
-                newArray[index] = action.question;
-              }
-            }
-            return QuestionActions.SetQuestions({ questions: newArray });
+            return this.editQuestion(action.question);
           })
         );
       })
@@ -217,5 +241,48 @@ export class QuestionEffects {
       })
     );
     // );
+  });
+
+  editQuestionEffect = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.EditQuestion),
+      switchMap((action) => {
+        return this.http
+          .put('http://localhost:3000/questions/' + action.question._id, {
+            question: action.question,
+          })
+          .pipe(
+            map((res) => {
+              return this.editQuestion(action.question);
+            }),
+            catchError((errRes) => {
+              console.log(errRes);
+              return of({ type: 'Dummy' });
+            })
+          );
+      })
+    );
+  });
+
+  editAnswerEffect = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.EditAnswer),
+      switchMap((action) => {
+        console.log(action.answer._id);
+        return this.http
+          .put(
+            'http://localhost:3000/questions/' +
+              action.answer.question +
+              '/answers/' +
+              action.answer._id,
+            { answer: action.answer }
+          )
+          .pipe(
+            map((res) => {
+              return this.editAnswer(action.answer);
+            })
+          );
+      })
+    );
   });
 }

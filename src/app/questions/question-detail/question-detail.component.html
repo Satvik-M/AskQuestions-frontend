@@ -2,24 +2,55 @@
 <div *ngIf="!isLoadingQuestions" class="main">
   <div class="question">Question</div>
   <div class="title">{{ question.title }}</div>
-  <div class="descriptionWrapper">
-    <div class="upvotes">{{ question.upvotes }}</div>
-    <div class="upvoteButtons">
+  <div *ngIf="editQuestion" class="editQuestion">
+    <form
+      class="form"
+      #editQuestionForm="ngForm"
+      (ngSubmit)="onEditQuestionSubmit(editQuestionForm)"
+    >
+      <textarea
+        name="description"
+        id="description"
+        cols="5"
+        rows="5"
+        class="form-control"
+        ngModel="{{ question.description }}"
+      ></textarea>
+      <button class="btn btn-primary btn-edit">Submit</button>
+    </form>
+  </div>
+  <div class="descriptionWrapper" *ngIf="!editQuestion">
+    <div class="left">
+      <div class="upvotes">{{ question.upvotes }}</div>
+      <div class="upvoteButtons">
+        <div class="icon top">
+          <fa-icon
+            [icon]="faangleup"
+            (click)="upvoteQuestion(question)"
+          ></fa-icon>
+        </div>
+        <div class="icon">
+          <fa-icon
+            [icon]="faangledown"
+            (click)="downvoteQuestion(question)"
+          ></fa-icon>
+        </div>
+      </div>
+      <div class="questionDescription">
+        {{ question.description }}
+      </div>
+    </div>
+    <div class="edit">
       <div class="icon top">
         <fa-icon
-          [icon]="faangleup"
-          (click)="upvoteQuestion(question)"
+          [icon]="faedit"
+          class="fa-sm"
+          (click)="toEditQuestion(question)"
         ></fa-icon>
       </div>
       <div class="icon">
-        <fa-icon
-          [icon]="faangledown"
-          (click)="downvoteQuestion(question)"
-        ></fa-icon>
+        <fa-icon [icon]="fatrash" class="fa-sm"></fa-icon>
       </div>
-    </div>
-    <div class="questionDescription">
-      {{ question.description }}
     </div>
   </div>
   <app-loader *ngIf="isLoadingAnswers" style="text-align: center"></app-loader>
@@ -30,24 +61,57 @@
     <div class="answer" *ngIf="answers && answers.length !== 0">Answers</div>
     <div class="answers">
       <div *ngIf="answers && answers.length !== 0">
-        <div class="answerWrapper" *ngFor="let answer of answers">
-          <div class="upvotes">{{ answer.upvotes }}</div>
-          <div class="upvoteButtons">
-            <div class="icon top">
-              <fa-icon
-                [icon]="faangleup"
-                (click)="upvoteAnswer(answer)"
-              ></fa-icon>
+        <div class="" *ngFor="let answer of answers">
+          <div class="answerWrapper" *ngIf="!(editAnswer === answer._id)">
+            <div class="left">
+              <div class="upvotes">{{ answer.upvotes }}</div>
+              <div class="upvoteButtons">
+                <div class="icon top">
+                  <fa-icon
+                    [icon]="faangleup"
+                    (click)="upvoteAnswer(answer)"
+                  ></fa-icon>
+                </div>
+                <div class="icon">
+                  <fa-icon
+                    [icon]="faangledown"
+                    (click)="downvoteAnswer(answer)"
+                  ></fa-icon>
+                </div>
+              </div>
+              <div class="answerDescription">
+                {{ answer.answer }}
+              </div>
             </div>
-            <div class="icon">
-              <fa-icon
-                [icon]="faangledown"
-                (click)="downvoteAnswer(answer)"
-              ></fa-icon>
+            <div class="edit">
+              <div class="icon top">
+                <fa-icon
+                  [icon]="faedit"
+                  class="fa-sm"
+                  (click)="toEditAnswer(answer)"
+                ></fa-icon>
+              </div>
+              <div class="icon">
+                <fa-icon [icon]="fatrash" class="fa-sm"></fa-icon>
+              </div>
             </div>
           </div>
-          <div class="answerDescription">
-            {{ answer.answer }}
+          <div *ngIf="editAnswer === answer._id">
+            <form
+              class="form"
+              #editAnswerForm="ngForm"
+              (ngSubmit)="onEditAnswerSubmit(editAnswerForm)"
+            >
+              <textarea
+                name="answer"
+                id="answer"
+                cols="5"
+                rows="5"
+                class="form-control"
+                ngModel="{{ answer.answer }}"
+              ></textarea>
+              <button class="btn btn-primary">Submit</button>
+            </form>
           </div>
         </div>
       </div>

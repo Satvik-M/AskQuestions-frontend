@@ -21,6 +21,7 @@ const routes: Routes = [
     path: 'questions/:id',
     component: QuestionDetailComponent,
     resolve: [QuestionDetailResolver],
+    pathMatch: 'prefix',
   },
 
   {
