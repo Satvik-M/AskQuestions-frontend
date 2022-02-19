@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { act, Actions, createEffect, ofType } from '@ngrx/effects';
-import { createAction, Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import * as fromApp from '../../store/app.reducer';
 import { AuthService } from '../auth.service';
@@ -180,8 +180,18 @@ export class AuthEffects {
     () => {
       return this.action$.pipe(
         ofType(AuthActions.AuthenticateSuccess),
-        tap((action) => {
-          action.redirect && this.router.navigate(['/']);
+        tap(() => {
+          const redirect = '' + this.route.snapshot.queryParams['redirectURL'];
+          if (this.route.snapshot.queryParams['redirectURL']) {
+            this.router.navigateByUrl(redirect);
+            console.log(this.route.snapshot);
+          } else if (
+            this.router.url === '/login' ||
+            this.router.url === '/register'
+          ) {
+            this.router.navigate(['/questions']);
+            console.log(this.route.snapshot);
+          }
         })
       );
     },
@@ -193,6 +203,7 @@ export class AuthEffects {
     private store: Store<fromApp.AppState>,
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 }

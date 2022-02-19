@@ -22,14 +22,20 @@ export class AuthGuard implements CanActivate {
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    this.store.dispatch(AuthActions.AutoLogin());
     return this.store.select('auth').pipe(
       take(1),
       map((authState) => authState.user),
       map((user) => {
+        console.log(user);
         const isUser = !!user;
-        if (user) return true;
-        else return this.router.createUrlTree(['/login']);
+        if (user) {
+          return true;
+        } else {
+          // console.log('fuck');
+          return this.router.createUrlTree(['/login'], {
+            queryParams: { redirectURL: state.url },
+          });
+        }
       })
     );
   }
