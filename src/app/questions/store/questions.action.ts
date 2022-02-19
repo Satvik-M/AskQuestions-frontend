@@ -41,9 +41,9 @@ export const AddAnswer = createAction(
 export const AddQuestion = createAction(
   '[Question] Add Question',
   props<{
-    id: string;
     title: string;
     description: string;
+    author: string;
   }>()
 );
 
@@ -65,4 +65,14 @@ export const VoteQuestion = createAction(
 export const VoteAnswer = createAction(
   '[Question] Vote Answer',
   props<{ answer: Answer; value: number }>()
+);
+
+export const deleteQuestion = createAction(
+  '[Question] Delete Question',
+  props<{ id: string }>()
+);
+
+export const deleteAnswer = createAction(
+  '[Answer] Delete Answer',
+  props<{ questionId: string; answerId: string }>()
 );

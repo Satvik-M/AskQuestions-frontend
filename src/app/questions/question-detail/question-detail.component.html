@@ -40,7 +40,7 @@
         {{ question.description }}
       </div>
     </div>
-    <div class="edit">
+    <div *ngIf="userId && userId === question.author" class="edit">
       <div class="icon top">
         <fa-icon
           [icon]="faedit"
@@ -49,7 +49,11 @@
         ></fa-icon>
       </div>
       <div class="icon">
-        <fa-icon [icon]="fatrash" class="fa-sm"></fa-icon>
+        <fa-icon
+          [icon]="fatrash"
+          class="fa-sm"
+          (click)="toDeleteQuestion(question)"
+        ></fa-icon>
       </div>
     </div>
   </div>
@@ -83,7 +87,7 @@
                 {{ answer.answer }}
               </div>
             </div>
-            <div class="edit">
+            <div *ngIf="answer.author === userId" class="edit">
               <div class="icon top">
                 <fa-icon
                   [icon]="faedit"
@@ -92,7 +96,11 @@
                 ></fa-icon>
               </div>
               <div class="icon">
-                <fa-icon [icon]="fatrash" class="fa-sm"></fa-icon>
+                <fa-icon
+                  [icon]="fatrash"
+                  class="fa-sm"
+                  (click)="toDeleteAnswer(answer)"
+                ></fa-icon>
               </div>
             </div>
           </div>

@@ -45,8 +45,6 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   editAnswer: string = null;
 
   onSubmit(form: NgForm) {
-    // console.log(this.newAnswer);
-    // console.log(form.value.answer);
     this.store.dispatch(
       QuestionActions.AddAnswer({
         id: this.questionId,
@@ -54,7 +52,6 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
         author: this.userId,
       })
     );
-    // this.answers = [...this.answers, ans];
     form.reset();
   }
 
@@ -133,5 +130,18 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
     editAnswer.answer = form.value.answer;
     this.store.dispatch(QuestionActions.EditAnswer({ answer: editAnswer }));
     this.router.navigate([], { relativeTo: this.route });
+  }
+
+  toDeleteQuestion(question: Question) {
+    this.store.dispatch(QuestionActions.deleteQuestion({ id: question._id }));
+  }
+
+  toDeleteAnswer(answer: Answer) {
+    this.store.dispatch(
+      QuestionActions.deleteAnswer({
+        answerId: answer._id,
+        questionId: this.questionId,
+      })
+    );
   }
 }

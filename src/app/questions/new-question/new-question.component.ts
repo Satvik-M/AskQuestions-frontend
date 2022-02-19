@@ -36,9 +36,9 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
     console.log(form.value);
     this.store.dispatch(
       QuestionActions.AddQuestion({
-        id: this.userid,
         title: form.value.title,
         description: form.value.description,
+        author: this.userid,
       })
     );
     form.reset();

@@ -8,13 +8,15 @@ import { Injectable } from '@angular/core';
 import * as QuestionActions from './questions.action';
 import { Answer } from '../answer.model';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class QuestionEffects {
   constructor(
     private action$: Actions,
     private store: Store<fromApp.AppState>,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   editQuestion(editedQuestion: Question) {
@@ -155,10 +157,10 @@ export class QuestionEffects {
             .post('http://localhost:3000/questions', {
               title: action.title,
               description: action.description,
-              author: action.id,
             })
             .pipe(
               map((res) => {
+                this.router.navigate(['/questions']);
                 console.log(res);
               }),
               catchError((errRes) => {
@@ -280,6 +282,64 @@ export class QuestionEffects {
           .pipe(
             map((res) => {
               return this.editAnswer(action.answer);
+            })
+          );
+      })
+    );
+  });
+
+  deleteQuestionEffect = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.deleteQuestion),
+      switchMap((action) => {
+        return this.http
+          .delete('http://localhost:3000/questions/' + action.id)
+          .pipe(
+            map(() => {
+              let questions: Question[];
+              this.store
+                .select('question')
+                .pipe(map((questionState) => questionState.questions))
+                .subscribe(
+                  (ques) =>
+                    (questions = ques.filter((q) => q._id !== action.id))
+                );
+              this.router.navigate(['/questions']);
+              return QuestionActions.SetQuestions({ questions: questions });
+            }),
+            catchError((err) => {
+              return of({ type: 'DUMMY' });
+            })
+          );
+      })
+    );
+  });
+
+  deleteAnswerEffect = createEffect(() => {
+    return this.action$.pipe(
+      ofType(QuestionActions.deleteAnswer),
+      switchMap((action) => {
+        return this.http
+          .delete(
+            'http://localhost:3000/questions/' +
+              action.questionId +
+              '/answers/' +
+              action.answerId
+          )
+          .pipe(
+            map(() => {
+              let answers: Answer[];
+              this.store
+                .select('question')
+                .pipe(map((questionState) => questionState.answers))
+                .subscribe(
+                  (ans) =>
+                    (answers = ans.filter((q) => q._id !== action.answerId))
+                );
+              return QuestionActions.SetAnswers({ answers: answers });
+            }),
+            catchError((err) => {
+              return of({ type: 'DUMMY' });
             })
           );
       })
