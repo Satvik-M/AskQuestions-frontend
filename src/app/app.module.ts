@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { AppRoutingModule } from './app.routing';
@@ -21,7 +21,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { AuthEffects } from './auth/store/auth.effects';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { NewQuestionComponent } from './questions/new-question/new-question.component';
-import { LoaderComponent } from './common/loader/loader.component';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { ModalComponent } from './shared/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { LoaderComponent } from './common/loader/loader.component';
     RegisterComponent,
     NewQuestionComponent,
     LoaderComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,

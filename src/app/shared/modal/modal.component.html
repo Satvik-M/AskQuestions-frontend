@@ -1,0 +1,91 @@
+<div class="overlay" (click)="onCancel()">
+  <div class="box" (click)="onBoxClick($event)">
+    <div *ngIf="signIn">
+      <h1>Sign In</h1>
+      <form #Loginform="ngForm" (submit)="onLogin(Loginform)">
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            ngModel
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            ngModel
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button class="btn btn-outline-primary" type="submit">Login</button>
+        <button
+          class="btn btn-outline-danger"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+      </form>
+      <div class="end">
+        New here? <span (click)="toSignUp()">Sign up!</span>
+      </div>
+    </div>
+    <div *ngIf="signUp">
+      <h1>Sign Up</h1>
+      <form class="" #Registerform="ngForm" (submit)="onRegister(Registerform)">
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <input
+            ngModel
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            ngModel
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            ngModel
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button class="btn btn-outline-primary" type="submit">Register</button>
+        <button
+          class="btn btn-outline-danger"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+      </form>
+      <div class="end">
+        New here? <span (click)="toSignIn()">Sign up!</span>
+      </div>
+    </div>
+  </div>
+</div>

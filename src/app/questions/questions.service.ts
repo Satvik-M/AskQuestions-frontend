@@ -5,6 +5,7 @@ import * as fromApp from '../store/app.reducer';
 import { Answer } from './answer.model';
 import { Question } from './questions.model';
 import * as QuestionActions from './store/questions.action';
+import * as CommonActions from '../shared/store/common.action';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionsService {
@@ -15,6 +16,10 @@ export class QuestionsService {
   }
 
   questionUpvote(paramQuestion: Question, user: User) {
+    if (!user) {
+      this.store.dispatch(CommonActions.openModal());
+      return;
+    }
     let question = { ...paramQuestion };
     if (
       question.votes.findIndex(
@@ -45,6 +50,10 @@ export class QuestionsService {
   }
 
   questionDownvote(paramQuestion: Question, user: User) {
+    if (!user) {
+      this.store.dispatch(CommonActions.openModal());
+      return;
+    }
     let question = { ...paramQuestion };
     if (
       question.votes.findIndex(
@@ -74,6 +83,10 @@ export class QuestionsService {
   }
 
   answerUpvoting(paramAnswer: Answer, user: User) {
+    if (!user) {
+      this.store.dispatch(CommonActions.openModal());
+      return;
+    }
     let answer = { ...paramAnswer };
     if (
       answer.votes.findIndex(
@@ -102,6 +115,10 @@ export class QuestionsService {
     );
   }
   answerDownvoting(paramAnswer: Answer, user: User) {
+    if (!user) {
+      this.store.dispatch(CommonActions.openModal());
+      return;
+    }
     let answer = { ...paramAnswer };
     if (
       answer.votes.findIndex(
