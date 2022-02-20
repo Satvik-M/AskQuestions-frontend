@@ -23,6 +23,7 @@ import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { NewQuestionComponent } from './questions/new-question/new-question.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ModalComponent } from './shared/modal/modal.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ModalComponent } from './shared/modal/modal.component';
     NewQuestionComponent,
     LoaderComponent,
     ModalComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
