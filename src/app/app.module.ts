@@ -24,6 +24,7 @@ import { NewQuestionComponent } from './questions/new-question/new-question.comp
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ModalComponent } from './shared/modal/modal.component';
 import { ErrorComponent } from './error/error.component';
+import { NotificationComponent } from './shared/notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ErrorComponent } from './error/error.component';
     LoaderComponent,
     ModalComponent,
     ErrorComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,

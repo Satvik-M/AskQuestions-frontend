@@ -9,6 +9,7 @@ import * as QuestionActions from './questions.action';
 import { Answer } from '../answer.model';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/common.service';
 
 @Injectable()
 export class QuestionEffects {
@@ -16,7 +17,8 @@ export class QuestionEffects {
     private action$: Actions,
     private store: Store<fromApp.AppState>,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private commonService: CommonService
   ) {}
 
   editQuestion(editedQuestion: Question) {
@@ -142,6 +144,12 @@ export class QuestionEffects {
                 res._id
               );
               return QuestionActions.SetAnswers({ answers: [...ans, newAns] });
+            }),
+            catchError((err) => {
+              this.commonService.addMessage(
+                'Some error occured! could not add answer'
+              );
+              return of({ type: 'DUMMY' });
             })
           );
       })
@@ -161,10 +169,14 @@ export class QuestionEffects {
             .pipe(
               map((res) => {
                 this.router.navigate(['/questions']);
+                this.commonService.addMessage('Question added successfully');
                 console.log(res);
               }),
               catchError((errRes) => {
-                return of(console.log(errRes));
+                this.commonService.addMessage(
+                  'Sorry some error occured! Could not Add question'
+                );
+                return of({ type: 'DUMMY' });
               })
             );
         })
@@ -192,6 +204,10 @@ export class QuestionEffects {
         return this.http.get(url).pipe(
           map((res) => {
             return this.editQuestion(action.question);
+          }),
+          catchError((err) => {
+            this.commonService.addMessage('Sorry, some error occured');
+            return of({ type: 'DUMMY' });
           })
         );
       })
@@ -238,11 +254,14 @@ export class QuestionEffects {
               }
             }
             return QuestionActions.SetAnswers({ answers: newArray });
+          }),
+          catchError((err) => {
+            this.commonService.addMessage('Sorry, some error occured');
+            return of({ type: 'DUMMY' });
           })
         );
       })
     );
-    // );
   });
 
   editQuestionEffect = createEffect(() => {
@@ -259,6 +278,9 @@ export class QuestionEffects {
             }),
             catchError((errRes) => {
               console.log(errRes);
+              this.commonService.addMessage(
+                'Some Error occured! Question not edited'
+              );
               return of({ type: 'Dummy' });
             })
           );
@@ -282,6 +304,12 @@ export class QuestionEffects {
           .pipe(
             map((res) => {
               return this.editAnswer(action.answer);
+            }),
+            catchError((err) => {
+              this.commonService.addMessage(
+                'Some Error occured! Answer not edited'
+              );
+              return of({ type: 'DUMMY' });
             })
           );
       })
@@ -305,9 +333,11 @@ export class QuestionEffects {
                     (questions = ques.filter((q) => q._id !== action.id))
                 );
               this.router.navigate(['/questions']);
+              this.commonService.addMessage('Question deleted successfully');
               return QuestionActions.SetQuestions({ questions: questions });
             }),
             catchError((err) => {
+              this.commonService.addMessage('Question deletion failed');
               return of({ type: 'DUMMY' });
             })
           );
@@ -336,9 +366,11 @@ export class QuestionEffects {
                   (ans) =>
                     (answers = ans.filter((q) => q._id !== action.answerId))
                 );
+              this.commonService.addMessage('Answer deleted successfully');
               return QuestionActions.SetAnswers({ answers: answers });
             }),
             catchError((err) => {
+              this.commonService.addMessage('Answer Deletion Failed');
               return of({ type: 'DUMMY' });
             })
           );

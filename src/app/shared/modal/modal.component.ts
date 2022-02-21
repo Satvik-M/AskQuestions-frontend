@@ -14,6 +14,12 @@ export class ModalComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
   signIn = true;
   signUp = false;
+  loginData: { email: string; password: string } = { email: '', password: '' };
+  registerData: { username: string; email: string; password: string } = {
+    username: '',
+    email: '',
+    password: '',
+  };
 
   ngOnInit(): void {}
 
@@ -33,19 +39,20 @@ export class ModalComponent implements OnInit {
     this.signUp = false;
   }
   onLogin(form: NgForm) {
-    const { email, password } = form.value;
     this.store.dispatch(
-      AuthActions.StartLogin({ email: email, password: password })
+      AuthActions.StartLogin({
+        email: this.loginData.email,
+        password: this.loginData.password,
+      })
     );
     this.onCancel();
   }
   onRegister(form: NgForm) {
-    const { username, email, password } = form.value;
     this.store.dispatch(
       AuthActions.StartRegister({
-        username: username,
-        password: password,
-        email: email,
+        username: this.registerData.username,
+        password: this.registerData.password,
+        email: this.registerData.email,
       })
     );
     this.onCancel();

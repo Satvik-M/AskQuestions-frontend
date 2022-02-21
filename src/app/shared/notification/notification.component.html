@@ -1,0 +1,8 @@
+<div *ngIf="message" class="card-overlay">
+  <div class="card-overlay-wrapper">
+    <div class="card-box">
+      <div class="content">{{ message }}</div>
+      <div class="button" (click)="onClose()">Close</div>
+    </div>
+  </div>
+</div>

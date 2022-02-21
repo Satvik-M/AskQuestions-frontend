@@ -4,13 +4,11 @@ import * as AuthActions from './auth.actions';
 export interface State {
   user: User;
   isLoading: boolean;
-  errMessage: string;
   redirect: boolean;
 }
 const initialState: State = {
   user: null,
   isLoading: false,
-  errMessage: null,
   redirect: false,
 };
 
@@ -54,7 +52,7 @@ const _authReducer = createReducer(
     return { ...state };
   }),
   on(AuthActions.clearError, (state) => {
-    return { ...state, errMessage: null };
+    return { ...state };
   })
 );
 

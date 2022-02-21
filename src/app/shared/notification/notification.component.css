@@ -1,0 +1,44 @@
+.card-overlay {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.card-overlay-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.card-box {
+  pointer-events: auto;
+  background-color: #323232;
+  color: white;
+  max-width: 70%;
+  min-width: 30%;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-radius: 7px;
+  box-shadow: 0 3px 5px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+}
+
+.content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #ffffffb3;
+}
+
+.button {
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  color: rgb(255, 64, 129);
+  cursor: pointer
+}

@@ -17,16 +17,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     email: '',
     password: '',
   };
-  error = null;
   sub: Subscription;
-  ngOnInit(): void {
-    this.sub = this.store
-      .select('auth')
-      .pipe(map((authState) => authState.errMessage))
-      .subscribe((err) => (this.error = err));
-  }
+  ngOnInit(): void {}
   onSubmit(form: NgForm) {
-    this.store.dispatch(AuthActions.clearError());
     this.store.dispatch(
       AuthActions.StartRegister({
         username: this.registerData.username,
@@ -39,10 +32,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
       email: '',
       password: '',
     };
+    form.reset();
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(AuthActions.clearError());
     this.sub.unsubscribe();
   }
 }

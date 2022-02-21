@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { CommonService } from 'src/app/shared/common.service';
 import * as fromApp from '../../store/app.reducer';
 import { AuthService } from '../auth.service';
 import { User } from '../user.model';
@@ -21,6 +22,7 @@ export class AuthEffects {
     console.log(errRes);
     let errMessage = 'Some error occured at our end';
     if (errRes.error.message) errMessage = errRes.error.message;
+    this.commonService.addMessage(errMessage);
     return of(AuthActions.AuthenticateFail({ errMessage: errMessage }));
   };
 
@@ -38,6 +40,7 @@ export class AuthEffects {
     );
     localStorage.setItem('user', JSON.stringify(user));
     this.authService.setLogoutTimer(authRes.expiresIn);
+    this.commonService.addMessage('Logged In!');
     return AuthActions.AuthenticateSuccess({
       username: authRes.user.username,
       email: authRes.user.email,
@@ -170,6 +173,7 @@ export class AuthEffects {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('user');
           this.router.navigate(['/login']);
+          this.commonService.addMessage('Logged out successfully');
         })
       );
     },
@@ -204,6 +208,7 @@ export class AuthEffects {
     private http: HttpClient,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private commonService: CommonService
   ) {}
 }

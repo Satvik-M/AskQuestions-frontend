@@ -3,10 +3,12 @@ import * as CommonActions from './common.action';
 
 export interface State {
   modal: boolean;
+  message: string;
 }
 
 const initialState: State = {
   modal: false,
+  message: '',
 };
 
 const _commonReducer = createReducer(
@@ -16,6 +18,12 @@ const _commonReducer = createReducer(
   }),
   on(CommonActions.closeModal, (state) => {
     return { ...state, modal: false };
+  }),
+  on(CommonActions.addMessage, (state, action) => {
+    return { ...state, message: action.message };
+  }),
+  on(CommonActions.clearMessage, (state) => {
+    return { ...state, message: '' };
   })
 );
 

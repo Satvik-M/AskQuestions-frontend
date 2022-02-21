@@ -10,19 +10,11 @@ import * as AuthActions from '../store/auth.actions';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
-  error = null;
-  sub: Subscription;
   loginData: { email: string; password: string } = { email: '', password: '' };
-  ngOnInit(): void {
-    this.sub = this.store
-      .select('auth')
-      .pipe(map((authState) => authState.errMessage))
-      .subscribe((err) => (this.error = err));
-  }
+  ngOnInit(): void {}
   onSubmit(form: NgForm) {
-    this.store.dispatch(AuthActions.clearError());
     this.store.dispatch(
       AuthActions.StartLogin({
         email: this.loginData.email,
@@ -30,9 +22,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
     );
     this.loginData = { email: '', password: '' };
-  }
-  ngOnDestroy(): void {
-    this.store.dispatch(AuthActions.clearError());
-    this.sub.unsubscribe();
+    form.reset();
   }
 }
