@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
 import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from '../store/auth.actions';
 
@@ -9,15 +10,29 @@ import * as AuthActions from '../store/auth.actions';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
-
-  ngOnInit(): void {}
+  error = null;
+  sub: Subscription;
+  loginData: { email: string; password: string } = { email: '', password: '' };
+  ngOnInit(): void {
+    this.sub = this.store
+      .select('auth')
+      .pipe(map((authState) => authState.errMessage))
+      .subscribe((err) => (this.error = err));
+  }
   onSubmit(form: NgForm) {
-    const { email, password } = form.value;
+    this.store.dispatch(AuthActions.clearError());
     this.store.dispatch(
-      AuthActions.StartLogin({ email: email, password: password })
+      AuthActions.StartLogin({
+        email: this.loginData.email,
+        password: this.loginData.password,
+      })
     );
-    form.reset();
+    this.loginData = { email: '', password: '' };
+  }
+  ngOnDestroy(): void {
+    this.store.dispatch(AuthActions.clearError());
+    this.sub.unsubscribe();
   }
 }

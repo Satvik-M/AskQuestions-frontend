@@ -15,8 +15,7 @@ import { map, tap } from 'rxjs/operators';
 import { Question } from '../questions.model';
 import { QuestionsService } from '../questions.service';
 import { User } from 'src/app/auth/user.model';
-import { HttpParams } from '@angular/common/http';
-
+import * as CommonActions from '../../shared/store/common.action';
 @Component({
   selector: 'app-question-detail',
   templateUrl: './question-detail.component.html',
@@ -45,6 +44,10 @@ export class QuestionDetailComponent implements OnInit, OnDestroy {
   editAnswer: string = null;
 
   onSubmit(form: NgForm) {
+    if (!this.user) {
+      this.store.dispatch(CommonActions.openModal());
+      return;
+    }
     this.store.dispatch(
       QuestionActions.AddAnswer({
         id: this.questionId,

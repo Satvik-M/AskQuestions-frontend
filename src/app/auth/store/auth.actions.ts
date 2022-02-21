@@ -32,3 +32,5 @@ export const StartLogin = createAction(
 );
 
 export const AutoLogin = createAction('[Auth] Auto Login');
+
+export const clearError = createAction('[Auth] Clear Error');

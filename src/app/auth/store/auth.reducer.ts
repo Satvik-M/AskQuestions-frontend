@@ -52,6 +52,9 @@ const _authReducer = createReducer(
   }),
   on(AuthActions.AutoLogin, (state) => {
     return { ...state };
+  }),
+  on(AuthActions.clearError, (state) => {
+    return { ...state, errMessage: null };
   })
 );
 

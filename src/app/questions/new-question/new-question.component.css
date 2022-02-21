@@ -1,6 +1,8 @@
 .row {
+  --bs-gutter-x: 0;
   margin-top: 1rem;
-  width: 100%
+  width: 100%;
+  padding: 2rem;
 }
 
 .heading {
@@ -14,4 +16,16 @@
 
 .btn {
   margin-top: 0.5rem;
+}
+
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.ng-valid.ng-touched {
+  border-color: #3bc485;
+}
+
+.inputError {
+  color: red
 }

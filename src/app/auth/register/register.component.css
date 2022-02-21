@@ -4,5 +4,26 @@
 
 img {
   width: 100%;
+}
 
+.error {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.75rem 0.5rem;
+  color: #57161c;
+  background-color: #ffa5a5;
+  border-radius: 5px;
+}
+
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.ng-valid.ng-touched {
+  border-color: #3bc485;
+}
+
+.inputError {
+  color: red;
+  font-size: 0.8rem;
 }

@@ -15,6 +15,10 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
   userid: string;
   authSub: Subscription;
+  questionData: { title: string; description: string } = {
+    title: '',
+    description: '',
+  };
 
   ngOnInit(): void {
     this.authSub = this.store
@@ -32,16 +36,15 @@ export class NewQuestionComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(form: NgForm) {
-    console.log(this.userid);
-    console.log(form.value);
     this.store.dispatch(
       QuestionActions.AddQuestion({
-        title: form.value.title,
-        description: form.value.description,
+        title: this.questionData.title,
+        description: this.questionData.description,
         author: this.userid,
       })
     );
-    form.reset();
+    this.questionData.title = '';
+    this.questionData.description = '';
   }
 
   ngOnDestroy(): void {
