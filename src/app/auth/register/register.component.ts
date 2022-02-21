@@ -10,14 +10,13 @@ import * as AuthActions from '../store/auth.actions';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
   registerData: { username: string; email: string; password: string } = {
     username: '',
     email: '',
     password: '',
   };
-  sub: Subscription;
   ngOnInit(): void {}
   onSubmit(form: NgForm) {
     this.store.dispatch(
@@ -33,9 +32,5 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: '',
     };
     form.reset();
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
   }
 }

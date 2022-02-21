@@ -193,7 +193,7 @@ export class AuthEffects {
             this.router.url === '/login' ||
             this.router.url === '/register'
           ) {
-            this.router.navigate(['/questions']);
+            this.router.navigate(['/']);
             console.log(this.route.snapshot);
           }
         })

@@ -121,7 +121,6 @@ export class QuestionEffects {
         return this.http
           .post('http://localhost:3000/questions/' + action.id + '/answers', {
             answer: action.answer,
-            author: action.author,
           })
           .pipe(
             map((res: Answer) => {
@@ -270,7 +269,8 @@ export class QuestionEffects {
       switchMap((action) => {
         return this.http
           .put('http://localhost:3000/questions/' + action.question._id, {
-            question: action.question,
+            title: action.question.title,
+            description: action.question.description,
           })
           .pipe(
             map((res) => {
@@ -299,7 +299,7 @@ export class QuestionEffects {
               action.answer.question +
               '/answers/' +
               action.answer._id,
-            { answer: action.answer }
+            { answer: action.answer.answer }
           )
           .pipe(
             map((res) => {
