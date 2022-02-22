@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { VerifyGuard } from './auth/verify.guard';
 import { ErrorComponent } from './error/error.component';
 import { HomeComponent } from './home/home.component';
 import { NewQuestionComponent } from './questions/new-question/new-question.component';
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'activate/:id',
+    component: HomeComponent,
+    canActivate: [VerifyGuard],
   },
   {
     path: '**',
